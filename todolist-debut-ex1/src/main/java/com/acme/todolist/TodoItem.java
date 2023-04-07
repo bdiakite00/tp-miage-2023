@@ -2,8 +2,10 @@ package com.acme.todolist;
 
 import java.time.Instant;
 
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
 
 /**
  * Un item à faire, immuable
@@ -12,6 +14,7 @@ import javax.persistence.Id;
  * @author bflorat
  *
  */
+
 @Entity
 public class TodoItem {
 	
@@ -41,6 +44,7 @@ public class TodoItem {
 	protected TodoItem() {	}
 	
 	public TodoItem(String id, Instant time, String content) {
+		
 		super();
 		this.id = id;
 		this.time = time;
