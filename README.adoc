@@ -39,20 +39,38 @@ TIP: [Rappel Git] Trois dépôts sont ici utilisés: le dépot Github de l'ensei
 * Observer le code du projet `todolist-debut-ex1`
 
 *Le code est-il structuré en couches ? Quel problèmes ce code peut-il poser ?*
+Oui modèle en couche car nous avons premièrement 2 dossiers permettant de séparer la
+vue applicative dans un dossier et les ressources dans un autre dossier.
+Ensuite dans le package principal ('main/java') , toutes les parties de l'application sont dans un fichier dédié.
+
 
 *Où se trouve le code métier (voir la règle de gestion RG 1) ?*
+c'est dans `src/main/java/com.acme.todolist/TodoListController.java'
 
 *Cette règle est-elle facilement testable par un test unitaire ?*
+Oui, la règle RG1 est facilement testable par un test unitaire, car elle est contenu dans TodoList Controller qui est une méthode isolée
+
 
 * Lancer une base PostgreSQL en Docker dans un terminal (on lance ici la base en mode interactif pour visualiser son activité. Pour la lancer en tâche de fond, remplacer les options `it` par `d` comme 'daemon'):
 ```bash
 docker run -it -e POSTGRES_PASSWORD=password -p 5432:5432 postgres
 ```
 *Expliquer cette ligne de commande (y compris les options utilisées)*
+Cette ligne de commande est utilisée pour lancer un conteneur Docker basé sur l'image "postgres", qui est une image officielle de PostgreSQL (un système de gestion de base de données relationnelle open source) disponible sur Docker Hub.. Voici ce que signifient les différents éléments de cette commande :
+- docker run: C'est la commande principale pour lancer un conteneur Docker.
+-it: Cela indique à Docker de lancer le conteneur en mode interactif (interactive terminal), ce qui permettra d'interagir avec la console du conteneur.
+-e POSTGRES_PASSWORD=password: Cela définit la variable d'environnement POSTGRES_PASSWORD avec la valeur "password", ce qui spécifie le mot de passe pour l'utilisateur "postgres" dans la base de données PostgreSQL qui sera créée dans le conteneur.
+-p 5432:5432: Cela mappe le port 5432 du système hôte (là où Docker est exécuté) sur le port 5432 du conteneur, qui est le port par défaut utilisé par PostgreSQL pour les connexions clientes.
+-postgres: C'est le nom de l'image Docker à partir de laquelle le conteneur sera créé.
+
+En résumé, cette commande lance un conteneur Docker utilisant l'image "postgres" pour exécuter une instance de PostgreSQL avec un mot de passe spécifié, en mappant le port 5432 du système hôte sur le port 5432 du conteneur, et en permettant une interaction avec la console du conteneur.
 
 * Compléter le code manquant dans la méthode `TodoListController.createTodoItem()`
 
 *Pourquoi `todoItemRepository` est-il `null` ? Quelle est la meilleure façon de l'injecter ?*
+Parce qu’il manque l’injection de dépendance sur le constructeur de le TodoListController.java. 
+il faut ajouter le @Autowired sur le constructeur de todolistController
+
 
 * Modifier le code en conséquence.
 
@@ -94,6 +112,13 @@ Source : http://leanpub.com/get-your-hands-dirty-on-clean-architecture[Tom Hombe
   - la couche `domain` qui contient les entités (au sens DDD, pas au sens JPA). En général des classes complexes (méthodes riches, relations entre les entités)
 
 *Rappeler en quelques lignes les grands principes de l'architecture hexagonale.*
+L'architecture hexagonale, également connue sous le nom de "Ports et Adapteurs" ou "Architecture propre", est un style d'architecture logicielle proposé par Alistair Cockburn. Il comprend les principes suivantes :
+- Séparation des préoccupations : L'architecture hexagonale cherche à séparer les différentes préoccupations d'un système logiciel en utilisant une approche modulaire.
+- Ports et adaptateurs : L'architecture hexagonale met en œuvre le principe de "Ports et Adaptateurs", où les hexagones définissent des interfaces (ou "ports") pour communiquer avec le monde extérieur, tels que les entrées (input) et les sorties (output) du système
+- Indépendance de l'infrastructure : Les hexagones dans l'architecture hexagonale sont indépendants de l'infrastructure sous-jacente, telle que les frameworks, les bibliothèques ou les bases de données.
+- Testabilité : L'architecture hexagonale favorise la testabilité du code en isolant la logique métier dans les hexagones, ce qui permet de facilement créer des tests unitaires et d'intégration pour vérifier le comportement attendu du système.
+- Flexibilité : L'architecture hexagonale vise à être flexible en permettant de facilement remplacer ou modifier les composants du système, tels que les adaptateurs, sans impacter la logique métier encapsulée dans les hexagones.
+
 
 Compléter ce code avec une fonctionnalité de création de `TodoItem`  persisté en base et appelé depuis un endpoint REST `POST /todos` qui :
 
@@ -110,6 +135,17 @@ _Temps estimé : 20 mins_
 * Implémenter (en junit) des TU sur la règle de gestion qui consiste à afficher `[LATE!]` dans la description d'un item en retard de plus de 24h.
 
 *Quels types de tests devra-t-on écrire pour les adapteurs ?* 
+Les tests pour les adaptateurs dans l'architecture hexagonale peuvent varier en fonction de leur rôle spécifique dans le système
+
+ - Tests d’intégration : ces tests permettent de vérifier que l’adaptateur est correctement intégré dans le système et qu’il communique correctement avec les autres composants.
+
+- Tests de performance : ces tests permettent de mesurer les temps de réponse de l’adaptateur en situation de charge, afin de s’assurer que celui-ci peut gérer le volume de données qu’il est censé traiter.
+
+- Tests de compatibilité : ces tests permettent de vérifier que l’adaptateur est compatible avec les différents protocoles et formats de données utilisés dans le système.
+
+- Tests de sécurité : ces tests permettent de vérifier que l’adaptateur ne présente pas de failles de sécurité ou de vulnérabilités susceptibles d’être exploitées par des attaquants.
+
+- Tests de régression : ces tests permettent de s’assurer que les modifications apportées à l’adaptateur ou au système n’ont pas introduit de nouveaux bugs ou de régressions par rapport à des versions précédentes.
 
 *S'il vous reste du temps, écrire quelques uns de ces types de test.*
 
